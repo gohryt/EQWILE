@@ -5,6 +5,4 @@ if [[ -z $1 ]]; then
 	exit 1
 fi
 
-echo "$1 : ${@:2}"
-exit
-./scripts/$1.sh "${@:2}"
+./scripts/$1 "${@:2}"
