@@ -1,0 +1,17 @@
+name = "healthcheck"
+host = "gohryt.online"
+
+[[URLs]]
+URL = "http://ya.ru"
+checkList = [ "status_code", "text" ]
+checkCount = 2
+
+[[URLs]]
+URL = "http://vk.com"
+checkList = [ "status_code" ]
+checkCount = 1
+
+[[URLs]]
+URL = "http://mail.ru"
+checkList = [ "status_code", "text" ]
+checkCount = 1
