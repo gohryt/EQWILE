@@ -46,7 +46,7 @@ func (checker *Checker) Register(name string, check Check) {
 	checker.checkMap[name] = check
 }
 
-func (checker *Checker) Run(ctx context.Context) (err error) {
+func (checker *Checker) Run(ctx context.Context) {
 	list := checker.configuration.List
 
 	ticker := time.Tick(checker.configuration.Interval * time.Second)
@@ -54,7 +54,7 @@ func (checker *Checker) Run(ctx context.Context) (err error) {
 root:
 	for {
 		for i := range list {
-			err = checker.Check(list[i])
+			err := checker.Check(list[i])
 			if err != nil {
 				log.Println(err)
 			}
