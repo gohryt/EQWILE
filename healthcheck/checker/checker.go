@@ -56,7 +56,7 @@ root:
 		for i := range list {
 			err = checker.Check(list[i])
 			if err != nil {
-				return
+				log.Println(err)
 			}
 		}
 
