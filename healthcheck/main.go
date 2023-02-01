@@ -23,14 +23,6 @@ type (
 		Port int    `toml:"port"`
 
 		Checker checker.Configuration
-
-		URLs []URL
-	}
-
-	URL struct {
-		URL        string
-		CheckList  []string `toml:"checkList"`
-		CheckCount int      `toml:"checkCount"`
 	}
 )
 
@@ -71,6 +63,14 @@ func Main(configuration *Configuration) (err error) {
 	defer cancelCause(nil)
 
 	checker := checker.Constructor(&configuration.Checker)
+
+	checker.Register("status_code", func(response *fasthttp.Response) any {
+		if response.StatusCode() == fasthttp.StatusOK {
+			return true
+		}
+
+		return false
+	})
 
 	server := fasthttp.Server{
 		Name:    configuration.Host,

@@ -5,17 +5,17 @@ port = 8080
 [Checker]
 interval = 8
 
-[[URLs]]
+[[Checker.List]]
 URL = "http://ya.ru"
 checkList = [ "status_code", "text" ]
 checkCount = 2
 
-[[URLs]]
+[[Checker.List]]
 URL = "http://vk.com"
 checkList = [ "status_code" ]
 checkCount = 1
 
-[[URLs]]
+[[Checker.List]]
 URL = "http://mail.ru"
 checkList = [ "status_code", "text" ]
 checkCount = 1
