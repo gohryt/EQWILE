@@ -10,15 +10,15 @@ import (
 
 type (
 	Configuration struct {
-		Interval time.Duration `toml:"interval"`
+		Interval int `yaml:"interval"`
 
-		List []URL
+		List []URL `yaml:"List"`
 	}
 
 	URL struct {
-		URL        string
-		CheckList  []string `toml:"checkList"`
-		CheckCount int      `toml:"checkCount"`
+		URL        string   `yaml:"URL"`
+		CheckList  []string `yaml:"checkList"`
+		CheckCount int      `yaml:"checkCount"`
 	}
 
 	Checker struct {
@@ -49,7 +49,7 @@ func (checker *Checker) Register(name string, check Check) {
 func (checker *Checker) Run(ctx context.Context) {
 	list := checker.configuration.List
 
-	ticker := time.Tick(checker.configuration.Interval * time.Second)
+	ticker := time.Tick(time.Duration(checker.configuration.Interval) * time.Second)
 
 root:
 	for {
@@ -66,8 +66,6 @@ root:
 			break root
 		}
 	}
-
-	return
 }
 
 func (checker *Checker) Check(URL URL) (err error) {

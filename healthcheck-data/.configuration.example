@@ -1,21 +1,20 @@
-name = "healthcheck"
-host = "gohryt.online"
-port = 8080
-
-[Checker]
-interval = 8
-
-[[Checker.List]]
-URL = "http://ya.ru"
-checkList = [ "status_code", "text" ]
-checkCount = 2
-
-[[Checker.List]]
-URL = "http://vk.com"
-checkList = [ "status_code" ]
-checkCount = 1
-
-[[Checker.List]]
-URL = "http://mail.ru"
-checkList = [ "status_code", "text" ]
-checkCount = 1
+name: healthcheck
+host: gohryt.online
+port: 8080
+Checker:
+  interval: 8
+  List:
+    - URL: 'http://ya.ru'
+      checkList:
+        - status_code
+        - text
+      checkCount: 2
+    - URL: 'http://vk.com'
+      checkList:
+        - status_code
+      checkCount: 1
+    - URL: 'http://mail.ru'
+      checkList:
+        - status_code
+        - text
+      checkCount: 1

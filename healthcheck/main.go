@@ -12,18 +12,20 @@ import (
 	"time"
 
 	"github.com/gohryt/EQWILE/healthcheck/checker"
+	"github.com/gohryt/EQWILE/healthcheck/database"
 
-	"github.com/pelletier/go-toml/v2"
 	"github.com/valyala/fasthttp"
+	"gopkg.in/yaml.v3"
 )
 
 type (
 	Configuration struct {
-		Name string `toml:"name"`
-		Host string `toml:"host"`
-		Port int    `toml:"port"`
+		Name string `yaml:"name"`
+		Host string `yaml:"host"`
+		Port int    `yaml:"port"`
 
-		Checker checker.Configuration
+		Checker  checker.Configuration  `yaml:"Checker"`
+		Database database.Configuration `yaml:"Database"`
 	}
 )
 
@@ -45,7 +47,7 @@ func main() {
 
 	configuration := &Configuration{}
 
-	err = toml.NewDecoder(file).Decode(configuration)
+	err = yaml.NewDecoder(file).Decode(configuration)
 	if err != nil {
 		log.Fatal(err)
 	}
