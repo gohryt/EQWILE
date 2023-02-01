@@ -65,6 +65,8 @@ func Main(configuration *Configuration) (err error) {
 	ctx, cancelCause := context.WithCancelCause(ctx)
 	defer cancelCause(nil)
 
+	_ = database.Constructor(&configuration.Database)
+
 	checker := checker.Constructor(&configuration.Checker)
 
 	checker.Register("status_code", func(response *fasthttp.Response) any {
