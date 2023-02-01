@@ -1,5 +1,9 @@
 name = "healthcheck"
 host = "gohryt.online"
+port = 8080
+
+[Checker]
+interval = 8
 
 [[URLs]]
 URL = "http://ya.ru"

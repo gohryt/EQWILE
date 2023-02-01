@@ -1,12 +1,16 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 	"time"
+
+	"github.com/gohryt/EQWILE/healthcheck/checker"
 
 	"github.com/pelletier/go-toml/v2"
 	"github.com/valyala/fasthttp"
@@ -16,6 +20,9 @@ type (
 	Configuration struct {
 		Name string `toml:"name"`
 		Host string `toml:"host"`
+		Port int    `toml:"port"`
+
+		Checker checker.Configuration
 
 		URLs []URL
 	}
@@ -32,7 +39,13 @@ const (
 )
 
 func main() {
-	file, err := os.OpenFile(".configuration", os.O_RDONLY, 0)
+	path := ".configuration"
+
+	if len(os.Args) > 1 {
+		path = os.Args[1]
+	}
+
+	file, err := os.OpenFile(path, os.O_RDONLY, 0)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,8 +57,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Println(configuration)
-
 	err = Main(configuration)
 	if err != nil {
 		log.Fatal(err)
@@ -53,10 +64,13 @@ func main() {
 }
 
 func Main(configuration *Configuration) (err error) {
-	http, err := net.Listen("tcp", ":80")
-	if err != nil {
-		return
-	}
+	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer cancel()
+
+	ctx, cancelCause := context.WithCancelCause(ctx)
+	defer cancelCause(nil)
+
+	checker := checker.Constructor(&configuration.Checker)
 
 	server := fasthttp.Server{
 		Name:    configuration.Host,
@@ -74,18 +88,25 @@ func Main(configuration *Configuration) (err error) {
 	}
 	defer server.Shutdown()
 
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
-
-	errs := make(chan error)
+	http, err := net.Listen("tcp", (":" + strconv.Itoa(configuration.Port)))
+	if err != nil {
+		return
+	}
 
 	go func() {
-		errs <- server.Serve(http)
+		cancelCause(checker.Run(ctx))
+	}()
+
+	go func() {
+		cancelCause(server.Serve(http))
 	}()
 
 	select {
-	case err = <-errs:
-	case <-signals:
+	case <-ctx.Done():
+		err = context.Cause(ctx)
+		if err == context.Canceled {
+			err = nil
+		}
 	}
 
 	return

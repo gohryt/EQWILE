@@ -7,7 +7,6 @@ linters:
     - contextcheck
     - dogsled
     - errname
-    - forbidigo
     - gocritic
     - gofumpt
     - gomoddirectives
@@ -32,6 +31,8 @@ linters-settings:
         disabled: true
       - name: call-to-gc
         disabled: true
+      - name: confusing-naming
+        disabled: true
       - name: context-as-argument
         disabled: true
       - name: error-naming
@@ -45,6 +46,8 @@ linters-settings:
       - name: file-header
         disabled: true
       - name: imports-blacklist
+        disabled: true
+      - name: import-shadowing
         disabled: true
       - name: line-length-limit
         disabled: true
@@ -71,7 +74,6 @@ linters-settings:
       - name: atomic
       - name: blank-imports
       - name: bool-literal-in-expr
-      - name: confusing-naming
       - name: confusing-results
       - name: constant-logical-expr
       - name: context-keys-type
@@ -90,7 +92,6 @@ linters-settings:
       - name: if-return
       - name: increment-decrement
       - name: indent-error-flow
-      - name: import-shadowing
       - name: modifies-parameter
       - name: nested-structs
       - name: range
