@@ -80,7 +80,10 @@ func (checker *Checker) Check(URL URL) (err error) {
 	response := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseResponse(response)
 
-	checker.client.Do(request, response)
+	err = checker.client.Do(request, response)
+	if err != nil {
+		return
+	}
 
 	for i := range URL.CheckList {
 		check := checker.checkMap[URL.CheckList[i]]
