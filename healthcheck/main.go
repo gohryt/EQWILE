@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"log"
 	"net"
@@ -66,6 +67,14 @@ func Main(configuration *Configuration) (err error) {
 
 	checker.Register("status_code", func(response *fasthttp.Response) any {
 		if response.StatusCode() == fasthttp.StatusOK {
+			return true
+		}
+
+		return false
+	})
+
+	checker.Register("text", func(response *fasthttp.Response) any {
+		if bytes.Contains(response.Body(), []byte("ok")) {
 			return true
 		}
 
