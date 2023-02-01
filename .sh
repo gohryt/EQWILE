@@ -5,4 +5,4 @@ if [[ -z $1 ]]; then
 	exit 1
 fi
 
-./scripts/${@:1}
+./sh/${@:1}
