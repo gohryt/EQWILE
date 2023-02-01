@@ -103,7 +103,7 @@ func Main(configuration *Configuration) (err error) {
 	}
 
 	go func() {
-		cancelCause(checker.Run(ctx))
+		checker.Run(ctx)
 	}()
 
 	go func() {
